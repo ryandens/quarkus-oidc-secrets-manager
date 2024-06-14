@@ -14,10 +14,13 @@ val quarkusPlatformVersion: String by project
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
+    implementation(enforcedPlatform("io.quarkus.platform:quarkus-amazon-services-bom:${quarkusPlatformVersion}"))
     implementation("io.quarkus:quarkus-rest-jackson")
     implementation("io.quarkus:quarkus-oidc")
     implementation("io.quarkus:quarkus-arc")
     implementation("io.quarkus:quarkus-rest")
+    implementation("io.quarkiverse.amazonservices:quarkus-amazon-secretsmanager")
+    implementation("software.amazon.awssdk:url-connection-client")
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
 }
