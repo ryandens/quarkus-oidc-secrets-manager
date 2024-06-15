@@ -6,8 +6,12 @@ implementation that leverages the `software.amazon.awssdk.services.secretsmanage
 
 This demonstrates the issue where the application is not able to initialize because the Quarkus OIDC extension
 attempts to resolve the value of the client secret from the `CredentialsProvider` during the 
-`io.quarkus.deployment.steps.OidcBuildStep` to validate the config. This is a problem because the `SecretsManagerClient`
-bean is not available in the `STATIC_INIT` scope.
+`io.quarkus.deployment.steps.OidcBuildStep` to validate the config. This is a problem because `RUNTIME_INIT` steps that 
+require access to synthetic beans initialized during RUNTIME_INIT should consume the SyntheticBeansRuntimeInitBuildItem.
+
+I think, in practice, the secret value should not be retrieved during the config validation and should instead be 
+deferred until it is required (outside the scope of a build step) like was done in the Quarkus GitHub App Extension 
+[here](https://github.com/quarkiverse/quarkus-github-app/pull/601).
 
 This can be reproduced by running the `GreetingResourceTest` test in this project, or by running this Quarkus project 
 in dev mode. A build scan of the test run is available: 
